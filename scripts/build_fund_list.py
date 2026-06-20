@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-"""下载全市场公募基金代码列表，生成 references/all_funds/fund_list.json（可打包、可检索）。
+"""下载全市场公募基金代码列表，生成 references/all_funds/fund_list.json.gz（可打包、可检索）。
 全市场约 2.7 万只基金。刷新重跑：  python scripts/build_fund_list.py
 来源：天天基金 fundcode_search.js（公开数据）。
+注：未压缩约 4MB，超过技能打包单文件 1MB 上限，故以 gzip 存储。
 """
-import os, re, json, datetime
+import os, re, json, gzip, datetime
 import requests
 
 requests.packages.urllib3.disable_warnings()
@@ -27,13 +28,13 @@ def main():
         "count": len(funds),
         "funds": funds,
     }
-    with open(os.path.join(OUT, "fund_list.json"), "w", encoding="utf-8") as f:
+    with gzip.open(os.path.join(OUT, "fund_list.json.gz"), "wt", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False)
     # 类型清单（便于按类型筛选时知道有哪些类型名）
     types = sorted({f["type"] for f in funds})
     with open(os.path.join(OUT, "_types.txt"), "w", encoding="utf-8") as f:
         f.write("\n".join(types))
-    print(f"已写入 {len(funds)} 只基金 → references/all_funds/fund_list.json")
+    print(f"已写入 {len(funds)} 只基金 → references/all_funds/fund_list.json.gz")
     print(f"类型共 {len(types)} 种，见 references/all_funds/_types.txt")
 
 

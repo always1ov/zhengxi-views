@@ -152,7 +152,7 @@ zhengxi-views/
 │   │   ├── 001513_易方达信息产业混合/
 │   │   └── …（共 8 只基金，每只含 季度持仓.md 与 净值业绩规模.md）
 │   └── all_funds/
-│       └── fund_list.json
+│       └── fund_list.json.gz
 └── scripts/
     ├── search_corpus.py
     ├── build_index.py
@@ -222,7 +222,7 @@ skill 会运行 python 脚本。Claude Code 默认每次运行都要确认。想
 
 **通用思路（任何支持自定义指令 + 文件上传的 AI）**：
 - **指令**：把 `SKILL.md` 正文粘进"系统提示 / 自定义指令"。其中"运行脚本的方式"那段是 Claude Code 专属，可删或改为"用代码解释器运行上传的脚本"；务必保留行为约束（溯源、不杜撰、推演与原话分开、语料外首句加粗声明非原话）。
-- **知识**：上传 `references/` 全部内容（`method.md`、`scorecard.md`、`corpus/`、`fund_data/`、`all_funds/fund_list.json`）；要跑脚本的再上传 `scripts/`。
+- **知识**：上传 `references/` 全部内容（`method.md`、`scorecard.md`、`corpus/`、`fund_data/`、`all_funds/fund_list.json.gz`）；要跑脚本的再上传 `scripts/`。
 
 ### Cursor（IDE，功能最全，接近 Claude Code）
 
@@ -234,7 +234,7 @@ skill 会运行 python 脚本。Claude Code 默认每次运行都要确认。想
 
 1. 新建一个 GPT（My GPTs → Create）。
 2. **Instructions**：粘贴 `SKILL.md` 正文（按上面"通用思路"调整脚本相关措辞）。
-3. **Knowledge**：上传 `method.md`、`scorecard.md`、`corpus/`（可打包成 zip）、`fund_data/`、`all_funds/fund_list.json`，以及 `scripts/*.py`。
+3. **Knowledge**：上传 `method.md`、`scorecard.md`、`corpus/`（可打包成 zip）、`fund_data/`、`all_funds/fund_list.json.gz`，以及 `scripts/*.py`。
 4. 打开 **Code Interpreter（数据分析）**。
 - 可用：溯源问答、方法、风格点评、郑希基金数据，以及对上传数据用脚本检索 / 评分。
 - 受限：全市场**实时抓取**（Code Interpreter 无外网）——改为本地先抓好再上传。

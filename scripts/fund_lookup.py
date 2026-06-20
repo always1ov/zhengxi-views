@@ -7,19 +7,15 @@
   python scripts/fund_lookup.py 易方达 --type 混合 # 名称含“易方达”且类型含“混合”
   python scripts/fund_lookup.py 005827            # 直接按代码
   python scripts/fund_lookup.py 光伏 --max 30
-依赖 references/all_funds/fund_list.json（先跑 build_fund_list.py 生成）。
+依赖 references/all_funds/fund_list.json.gz（先跑 build_fund_list.py 生成）。
 """
 import os, sys, json, argparse
+import _funds
 
 try:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 except Exception:
     pass
-
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
-LIST = os.path.join(ROOT, "references", "all_funds", "fund_list.json")
-
 
 def main():
     ap = argparse.ArgumentParser()
@@ -28,10 +24,10 @@ def main():
     ap.add_argument("--max", type=int, default=40)
     args = ap.parse_args()
 
-    if not os.path.exists(LIST):
-        print("缺少 fund_list.json，请先运行：python scripts/build_fund_list.py")
+    data = _funds.load_list()
+    if data is None:
+        print("缺少 fund_list.json(.gz)，请先运行：python scripts/build_fund_list.py")
         return
-    data = json.load(open(LIST, encoding="utf-8"))
     funds = data["funds"]
     q = [s for s in args.query]
 

@@ -14,6 +14,7 @@
 import os, sys, json, glob
 import fetch_fund_data as F
 import fetch_any_fund as A
+import _funds
 
 try:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -24,14 +25,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 ZX_DIR = os.path.join(ROOT, "references", "fund_data")          # 郑希精编快照
 CACHE = os.path.join(ROOT, "references", "fund_data_cache")     # 任意基金缓存
-LIST = os.path.join(ROOT, "references", "all_funds", "fund_list.json")
 
 
 def resolve(arg):
     """把代码或名称解析成 (code, name, type)。名称多命中时取最短名（通常是母基金/主代码）。"""
-    if not os.path.exists(LIST):
+    data = _funds.load_list()
+    if data is None:
         return arg, arg, ""
-    funds = json.load(open(LIST, encoding="utf-8"))["funds"]
+    funds = data["funds"]
     if arg.isdigit():
         for f in funds:
             if f["code"] == arg:
